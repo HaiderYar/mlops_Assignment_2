@@ -5,6 +5,7 @@ This project automates a data extraction lifecycle from extracting data, transfo
 ## How To Run?
 - Install the necessary libraries from `requirements.txt` file
 - Run the following to install Apache Airflow in a Python virtual environment:
+```bash
 pip install apache-airflow
 
 - Set the Airflow environment variable:
