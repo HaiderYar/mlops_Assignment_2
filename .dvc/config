@@ -1,0 +1,5 @@
+[core]
+    remote = mlops_assignment_2_remote
+['remote "mlops_assignment_2_remote"']
+    url = gdrive://1jFEr-Z4iwOdqvOwOb6O5fx-05SeCu-ec
+    gdrive_achknowledge_abuse = True
