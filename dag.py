@@ -102,14 +102,56 @@ def DVC_PUSH():
     os.system("dvc add extracted_data.csv")
     os.system("dvc push")
 
-urls = ['https://www.dawn.com/','https://www.bbc.com/'] 
+urls = ['https://www.dawn.com/','https://www.dawn.com/']
 file_name = 'C:/University/Semester 8/MLOPS/Assignments/Assignment 2/mlops_Assignment_2/extracted_data.csv'
 
-def extraction_task():
+def extraction_task(urls):
     print("Data extraction task.......")
-    data = []
+    all_articles = []
     for url in urls:
-        
+        links, articles = extract_data(url)
+        all_articles.extend(articles)
+    return all_articles
+
+def preprcessing_task(articles):
+    print("Preprocessing article.......")
+    preprocessed_articles = preprocess_articles(articles)
+    return preprocessed_articles
+
+def saving_to_csv_task(articles,filename):
+    print("Saving to csv.......")
+    save_to_csv(articles,filename)
+
+
+# Setting up dag
+
+default_argums = {
+    'owner': 'haider'
+}
+
+dag = DAG(
+    dag_id='mlops_assignment2_DAG',
+    default_args=default_argums,
+    description='This is mlops assignment 2 DAG where web scraping is done and automitically updaing using dvc',
+    tags=['assignment2', 'mlops'],
+    catchup=False,
+    schedule=None
+)
+
+
+with dag:
+    extracting_task = PythonOperator(
+        task_id='extracting_task',
+        python_callable=extraction_task,
+        op_kwargs={'urls': urls},
+        provide_context=True
+    )
+
+
+
+
+
+    
 
 
 
@@ -134,7 +176,6 @@ def extraction_task():
 
 
 # # Data Extraction from BBC
-# bbc_links, bbc_articles = extract_data(bbc_url)
 # print("\nExtracted BBC.com data:")
 # preprocessed_bbc_articles = preprocess_articles(bbc_articles)
 
