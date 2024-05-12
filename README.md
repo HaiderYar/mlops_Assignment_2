@@ -37,7 +37,7 @@ Extracts data from a list of URLs (`urls`) using the `extract_data` function. Ea
 Preprocesses the extracted data using the `clean_data` function. This task ensures that the text data is cleaned and formatted consistently.
 
 ### Save Task:
-Saves the preprocessed data to a CSV file specified by filename. The data is saved in the format of 'id', 'title', 'description', and 'source' columns.
+Saves the preprocessed data to a CSV file specified by filename. The data is saved in the format of 'title', 'description'.
 
 ### DVC Push Task:
 Adds the CSV file (`data/extracted.csv`) to the DVC repository using `dvc add` command and pushes the changes to the remote Google Drive storage using `dvc push`.
