@@ -6,11 +6,6 @@ from airflow.operators.python import PythonOperator
 import os
 from airflow import DAG
 
-YELLOW = "\033[93m"
-ORANGE = "\033[33m"
-RED = "\033[91m"
-RESET = "\033[0m"
-
 
 # Extraction code
 
@@ -147,42 +142,59 @@ with dag:
         provide_context=True
     )
 
+    preprocess_task = PythonOperator(
+        task_id='preprocess_task',
+        python_callable=preprcessing_task,
+        op_kwargs={'data': extracting_task.output},
+        provide_content=True
+    )
+
+    saving_task = PythonOperator(
+        task_id = 'saving_task',
+        python_callable=saving_to_csv_task,
+        op_kwargs={'filename': file_name, 'data':preprocess_task.output},
+        provide_context = True
+    )
+
+    dvc_push_task = PythonOperator(
+        task_id = 'dvc_push_task',
+        python_callable=DVC_PUSH
+    )
+
+    git_push_task = PythonOperator(
+        task_id = 'git_push_task',
+        python_callable=push
+    )
 
 
+# Execution Sequence 
+extracting_task >> preprocess_task >> saving_task >> dvc_push_task >> git_push_task
 
 
+def main():
+    dawn_url = "https://www.dawn.com/"
+    bbc_url = "https://www.bbc.com/"
+
+    filename = 'C:/University/Semester 8/MLOPS/Assignments/Assignment 2/mlops_Assignment_2/extracted_data.csv'
+
+    # Data Extraction from dawn
+    dawn_links, dawn_articles = extract_data(dawn_url)
+    print("Data has been extracted from dawn url")
+    # 
+    preprocessed_dawn_articles = preprocess_articles(dawn_articles)
+
+    # Data Extraction from BBC
+    print("\nExtracted BBC.com data:")
+    bbc_links, bbc_articles = extract_data(bbc_url)
+    preprocessed_bbc_articles = preprocess_articles(bbc_articles)
+
+    # Concatenate articles from both sources
+    all_articles = preprocessed_dawn_articles + preprocessed_bbc_articles
     
+    # Save all data to a single CSV file
+    save_to_csv(all_articles, 'extracted_data.csv')
+    print("All data saved to CSV.")
 
 
-
-
-
-
-
-
-
-
-
-
-# # URLS
-# dawn_url = "https://www.dawn.com/"
-# bbc_url = "https://www.bbc.com/"
-
-# # Data Extraction from dawn
-# dawn_links, dawn_articles = extract_data(dawn_url)
-# print("Data has been extracted from dawn url")
-
-# preprocessed_dawn_articles = preprocess_articles(dawn_articles)
-
-
-# # Data Extraction from BBC
-# print("\nExtracted BBC.com data:")
-# preprocessed_bbc_articles = preprocess_articles(bbc_articles)
-
-
-# # Concatenate articles from both sources
-# all_articles = preprocessed_dawn_articles + preprocessed_bbc_articles
-
-# # Save all data to a single CSV file
-# save_to_csv(all_articles, 'extracted_data.csv')
-# print("All data saved to CSV.")
+if __name__ == '__main__':
+    main()
