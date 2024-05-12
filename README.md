@@ -7,20 +7,24 @@ This project automates a data extraction lifecycle from extracting data, transfo
 - Run the following to install Apache Airflow in a Python virtual environment:
 ```bash
 pip install apache-airflow
-
+```
 - Set the Airflow environment variable:
+```bash
 export AIRFLOW_HOME="path to the root of this cloned repo"
-
+```
 
 - Initialize Airflow's database:
+```bash
 airflow db init
-
+```
 - Run the following in a separate console to start the Airflow scheduler:
+```bash
 airflow scheduler
-
+```
 - Run the following in another separate console and open the Airflow user interface at `http://localhost:8080`:
+```bash
 airflow webserver -p 8080
-
+```
 - Find the DAG with the name specified in the code and toggle the pause button to activate the DAG.
 - Click the play button on the top right to manually trigger the DAG run.
 
