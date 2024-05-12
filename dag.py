@@ -146,7 +146,7 @@ with dag:
         task_id='preprocess_task',
         python_callable=preprcessing_task,
         op_kwargs={'data': extracting_task.output},
-        provide_content=True
+        # provide_content=True
     )
 
     saving_task = PythonOperator(

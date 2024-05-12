@@ -52,19 +52,6 @@ The tasks are executed sequentially in the following order:
 
 The DAG is configured to run manually (`schedule=None`) and does not have a specific schedule for automatic execution.
 
-## Encountered Challenges
-#### Challenge: Modifying Airflow configuration to detect DAGs present in locations other than the Airflow folder.
-Solution: Make a `dags` directory in your current folder, place DAGs there, and set the environment variable `export AIRFLOW_HOME="current folder"`.
-
-#### Challenge: Automating Git and DVC commands.
-Solution: Use Python `os` library.
-
-#### Challenge: Installing Airflow in a Python virtual environment.
-Solution: `pip install apache-airflow`
-
-#### Challenge: Dataset not being saved using Airflow.
-Solution: Use absolute path for the dataset.
-
 ## Points To Note
 - Place all/any DAGs in the `/dags` folder for Airflow to detect.
 - Run `airflow dags list` to check if Airflow properly picks up DAGs from the DAG bag (dag folder which contains all DAGs).
